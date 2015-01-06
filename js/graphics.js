@@ -32,19 +32,22 @@ function createSprite(name,spritegrid, colors, padding) {
     return sprite;
 }
 
-function regenText(spritecanvas,spritectx) {
-	textImages={};
-
-	for (var n in font) {
-		if (font.hasOwnProperty(n)) {
-			textImages[n] = createSprite('char'+n,font[n], undefined, 1);
-		}
-	}
+function regenText(image) {
+    textImages = {}
+    for (var i = 0; i < image.length; i++) {
+        for (var j = 0; j < image[i].length; j++) {
+            var ch = image[i].charAt(j);
+            if ((ch in font) && !(ch in textImages)) {
+                textImages[ch] = createSprite('char'+ch,font[ch], undefined, 1);
+            }
+        }
+    }
 }
+
 var spriteimages;
 function regenSpriteImages() {
 	if (textMode) {
-		regenText();
+		regenText(titleImage);
 		return;
 	} else if (levelEditorOpened) {
         textImages['s'] = createSprite('chars',font['s'],undefined);
