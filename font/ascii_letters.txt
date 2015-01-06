@@ -1,0 +1,49 @@
+ AAA        BBBB  b      CCCC       DDDD      d EEEEE       FFFFF    ff
+A   A       B   B b     C           D   D     d E           F       f
+A   A  aaaa BBBB  bbbb  C      cccc D   D  dddd EEEEE  eee  FFFFF fffff
+A   A a   a B   B b   b C     c     D   D d   d E     e   e F       f
+AAAAA a   a B   B b   b C     c     D   D d   d E     eeeee F       f
+A   A a   a B   B b   b C     c     D   D d   d E     e     F       f
+A___A__aaaa_BBBB___bbb___CCCC__cccc_DDDD___dddd_EEEEE__eee__F_______f__
+
+
+
+ GGGG       H   H h     IIIII   i   JJJJJ   j   K   K k     L      ll
+G           H   H h       I           J         K  K  k     L       l
+G      gggg HHHHH hhhh    I    ii     J    jj   K K   k   k L       l
+G     g   g H   H h   h   I     i     J     j   KK    k  k  L       l
+G  GG g   g H   H h   h   I     i     J     j   K K   kkk   L       l
+G   G g   g H   H h   h   I     i     J     j   K  K  k  k  L       l
+_GGGG__gggg_H___H_h___h_IIIII__iii__JJ______j___K___K_k___k_LLLLL__lll_
+          g                               j j
+       ggg                                 j
+
+MMMMM       N   N        OOO        PPPP         QQQ        RRRR
+M M M       NN  N       O   O       P   P       Q   Q       R   R
+M M M  m m  N N N  nnn  O   O  ooo  P   P pppp  Q   Q  qqqq RRRR   rrrr
+M M M m m m N  NN n   n O   O o   o P   P p   p Q   Q q   q R   R r
+M M M m m m N   N n   n O   O o   o PPPP  p   p Q Q Q q   q R   R r
+M M M m m m N   N n   n O   O o   o P     p   p Q Q Q q   q R   R r
+M_M_M_m_m_m_N___N_n___n__OOO___ooo__P_____pppp___QQQ___qqqq_R___R_r____
+                                          p       Q       q
+                                          p       Q       q
+
+ SSSS       TTTTT   t   U   U       V   V       W W W       X   X
+S             T     t   U   U       V   V       W W W        X X
+ SSS   ssss   T   ttttt U   U u   u V   V v   v W W W w w w  X X  x   x
+    S s       T     t   U   U u   u V   V v  v  W W W w w w   X    x x 
+    S  sss    T     t   U   U u   u V   V v v   W W W w w w  X X    x  
+    S     s   T     t   U   U u   u  V V  vv    W W W w w w  X X   x x 
+SSSS__ssss____T______tt__UUU___uuuu___V___v______W_W___w_w__X___X_x___x
+
+
+
+Y   Y       ZZZZZ
+ Y Y            Z
+  Y   y   y    Z  zzzzz
+  Y   y   y   Z      z
+  Y   y   y  Z      z
+  Y   y   y Z      z
+__Y____yyyy_ZZZZZ_zzzzz
+          y
+      yyyy

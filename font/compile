@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+
+from __future__ import unicode_literals
+import codecs
+import sys
+import traceback
+
+
+CHAR_WIDTH = 5
+CHAR_HEIGHT = 9
+SPACE_WIDTH = CHAR_WIDTH + 1
+SPACE_HEIGHT = CHAR_HEIGHT + 1
+
+
+def main():
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout) 
+    font = {
+        ' ': [[0] * 5] * 9,
+        '_': [[0] * 5] * 6 +
+             [[1] * 5] +
+             [[0] * 5] * 2
+        ,
+    }
+    for path in sys.argv[1:]:
+        load(font, path);
+
+    print "var font = {"
+    for ch, glyph in sorted(font.iteritems()):
+        if ord(ch) < 128:
+            print "\t%r:[" % str(ch)
+        else:
+            print "\t'%s':[" % ch
+        for line in glyph[:-1]:
+            print "\t%s," % str(line).replace(" ", "")
+        print "\t%s" % str(glyph[-1]).replace(" ", "")
+        print "\t],"
+    print "}"
+
+
+def load(font, path):
+    with codecs.open(path, "r", "utf-8") as f:
+        lines = f.read().split("\n")
+
+    rows = (len(lines) + CHAR_HEIGHT) / SPACE_HEIGHT
+    cols = (max(len(line) for line in lines) + CHAR_WIDTH) / SPACE_WIDTH
+    grid = {}
+    for y, line in enumerate(lines):
+        for x, ch in enumerate(line):
+            grid[x, y] = ch
+
+    # Check constraints on font files.  There should be blank rows and
+    # columns separating characters.  The sixth line of each character
+    # should be an underline, indicating the font's baseline.
+    for (x, y), ch in sorted(grid.iteritems()):
+        blank = (x % SPACE_WIDTH == CHAR_WIDTH) or (y % SPACE_HEIGHT == CHAR_HEIGHT)
+        if y % SPACE_HEIGHT == 6:
+            good, bad = "_", " "
+        else:
+            good, bad = " ", "_"
+        if (ch == bad) or (blank and (ch != good)):
+            raise ValueError("%s:%d:%d should be %r but is %r" % (path, y + 1, x + 1, good, ch))
+
+    for oy in xrange(0, rows * SPACE_HEIGHT, SPACE_HEIGHT):
+        for ox in xrange(0, cols * SPACE_WIDTH, SPACE_WIDTH):
+            # Build a sub-grid from a slice of the file
+            sub = {}
+            ch = None
+            for y in xrange(CHAR_HEIGHT):
+                for x in xrange(CHAR_WIDTH):
+                    sub[x, y] = grid.get((ox + x, oy + y), " ")
+
+            # Figure out which letter this is (or skip if none)
+            ch = frozenset(sub.itervalues()) - frozenset(" _")
+            if len(ch) == 0:
+                continue
+            elif len(ch) == 1:
+                ch, = ch
+            else:  # len(ch) > 1:
+                a, b = sorted(ch)[:2]
+                raise ValueError("%s:%d:%d: character contains both %s and %s" % (path, oy + 1, ox + 1, a, b))
+
+            glyph = []
+            for y in xrange(CHAR_HEIGHT):
+                glyph.append([0] * 5)
+                for x in xrange(CHAR_WIDTH):
+                    if sub[x, y] == ch:
+                        glyph[y][x] = 1
+            if ch in font:
+                raise ValueError("multiple definitions for %s" % ch)
+            font[ch] = glyph
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except:
+        t, e, tb = sys.exc_info()
+        traceback.print_tb(tb)
+        print unicode(e)
