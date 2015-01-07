@@ -38,7 +38,14 @@ function regenText(image) {
         for (var j = 0; j < image[i].length; j++) {
             var ch = image[i].charAt(j);
             if ((ch in font) && !(ch in textImages)) {
-                textImages[ch] = createSprite('char'+ch,font[ch], undefined, 1);
+                var sprite = [];
+                for (var y = 0; y < 9; ++y) {
+                    sprite.push([]);
+                    for (var x = 0; x < 5; ++x) {
+                        sprite[y].push((font[ch][y] & (1 << x)) ? 1 : 0)
+                    }
+                }
+                textImages[ch] = createSprite('char'+ch, sprite, undefined, 1);
             }
         }
     }

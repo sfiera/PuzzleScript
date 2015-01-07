@@ -15,25 +15,19 @@ SPACE_HEIGHT = CHAR_HEIGHT + 1
 def main():
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout) 
     font = {
-        ' ': [[0] * 5] * 9,
-        '_': [[0] * 5] * 6 +
-             [[1] * 5] +
-             [[0] * 5] * 2
-        ,
+        ' ': [0] * 9,
+        '_': [0, 0, 0, 0, 0, 0, 31, 0],
     }
     for path in sys.argv[1:]:
         load(font, path);
 
     print "var font = {"
     for ch, glyph in sorted(font.iteritems()):
+        glyph = str(glyph).replace(" ", "")
         if ord(ch) < 128:
-            print "\t%r:[" % str(ch)
+            print "\t%r:%s," % (str(ch), glyph)
         else:
-            print "\t'%s':[" % ch
-        for line in glyph[:-1]:
-            print "\t%s," % str(line).replace(" ", "")
-        print "\t%s" % str(glyph[-1]).replace(" ", "")
-        print "\t],"
+            print "\t'%s':%s," % (ch, glyph)
     print "}"
 
 
@@ -81,10 +75,10 @@ def load(font, path):
 
             glyph = []
             for y in xrange(CHAR_HEIGHT):
-                glyph.append([0] * 5)
+                glyph.append(0)
                 for x in xrange(CHAR_WIDTH):
                     if sub[x, y] == ch:
-                        glyph[y][x] = 1
+                        glyph[y] |= 1 << x
             if ch in font:
                 raise ValueError("multiple definitions for %s" % ch)
             font[ch] = glyph
