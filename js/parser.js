@@ -173,6 +173,8 @@ var codeMirrorFn = function() {
     var reg_sounddirectionindicators = /\s*(up|down|left|right|horizontal|vertical|orthogonal)\s*/;
     var reg_winconditionquantifiers = /^(all|any|no|some)$/;
     var reg_keywords = /(objects|collisionlayers|legend|sounds|rules|winconditions|\.\.\.|levels|up|down|left|right|^|v|\>|\<|no|horizontal|orthogonal|vertical|any|all|no|some|moving|stationary|parallel|perpendicular|action)/;
+    var reg_good_chars = /[ -~£]+/;
+    var reg_bad_char = /[^ -~£]/;
     var keyword_array = ['objects', 'collisionlayers', 'legend', 'sounds', 'rules', '...','winconditions', 'levels', 'up', 'down', 'left', 'right', 'late','rigid', '^','v','\>','\<','no','randomdir','random', 'horizontal', 'vertical','any', 'all', 'no', 'some', 'moving','stationary','parallel','perpendicular','action','message'];
 
     //  var keywordRegex = new RegExp("\\b(("+cons.join(")|(")+"))$", 'i');
@@ -905,8 +907,12 @@ var codeMirrorFn = function() {
                         }
 
                         if (state.tokenIndex===-4) {
-                        	stream.skipToEnd();
-                        	return 'MESSAGE';
+                            if (stream.eatWhile(reg_good_chars)) {
+                                return 'MESSAGE';
+                            } else if (stream.eatWhile(reg_bad_char)) {
+                                logWarning('Message character "' + ch.toUpperCase() + '" isn\'t supported', state.lineNumber);
+                                return 'ERROR';
+                            }
                         }
                         if (stream.match(/\s*\-\>\s*/, true)) {
                             return 'ARROW';
@@ -1047,8 +1053,12 @@ var codeMirrorFn = function() {
                             }
                         } else {
                             if (state.tokenIndex == 1) {
-                                stream.skipToEnd();
-                               	return 'MESSAGE';
+                                if (stream.eatWhile(reg_good_chars)) {
+                                    return 'MESSAGE';
+                                } else if (stream.eatWhile(reg_bad_char)) {
+                                    logWarning('Message character "' + ch.toUpperCase() + '" isn\'t supported', state.lineNumber);
+                                    return 'ERROR';
+                                }
                             }
                         }
 
