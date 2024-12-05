@@ -87,13 +87,22 @@ function generateExtraMembers(state) {
         var key = state.metadata[i];
         var val = state.metadata[i + 1];
         if (key === 'color_palette') {
-            if (val in colorPalettesAliases) {
-                val = colorPalettesAliases[val];
-            }
-            if (colorPalettes[val] === undefined) {
-                logError('Palette "' + val + '" not found, defaulting to arnecolors.', 0);
-            } else {
-                colorPalette = colorPalettes[val];
+            var terms = val.split(/\s+/);
+            for (var i in terms) {
+                var term = terms[i];
+                var alias = term.match(/^([^=]+)=(.+)$/);
+                if (term in colorPalettesAliases) {
+                    term = colorPalettesAliases[term];
+                }
+                if (term in colorPalettes) {
+                    for (var color in colorPalettes[term]) {
+                        colorPalette[color] = colorPalettes[color];
+                    }
+                } else if (alias !== null) {
+                    colorPalette[alias[1]] = colorToHex(alias[2]);
+                } else {
+                    logError('Palette "' + term + '" not found', 0);
+                }
             }
         } else if (key === 'debug') {
             if (IDE && unitTesting===false){
